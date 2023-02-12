@@ -1,7 +1,6 @@
-package Client;
+package client;
 
-import Config.Config;
-import Server.Server;
+import config.Config;
 
 import java.io.*;
 import java.net.Socket;

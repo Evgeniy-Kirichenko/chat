@@ -1,6 +1,6 @@
-package Server;
+package server;
 
-import Config.Config;
+import config.Config;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;
