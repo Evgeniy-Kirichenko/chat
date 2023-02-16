@@ -3,6 +3,8 @@ package server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +53,6 @@ public class Server {
 
 
         public Connection(Socket socket) {
-            //    this.socket = socket;
             try {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
@@ -73,8 +74,7 @@ public class Server {
                 String str = "";
                 while (true) {// цикл общения с пользователем,
                     str = in.readLine();
-                    if ("exit".equalsIgnoreCase(str))//если exit-
-                        // то выход из цикла общения
+                    if ("exit".equalsIgnoreCase(str))//если exit- то выход из цикла общения
                         break;
                     Main.logger.info(name + " : " + str);
                     messageAllConnection(name + " : " + str);
@@ -99,15 +99,19 @@ public class Server {
 
         private void messageAllConnection(String message) {
             synchronized (connectionList) {
-                connectionList.forEach(connection -> connection.out.println(message));
+                connectionList.forEach(connection -> connection.out.println(time() + " "+message));
             }
         }
 
         private static void delConnection(Connection connection, String name) {//удаление закрытого соединения из списка ссединений
             synchronized (connectionList) {
-                Main.logger.info("Удалено соедиения пользователя " + name + " из списка соединений");
+                Main.logger.info("Удалено соединения пользователя " + name + " из списка соединений");
                 connectionList.remove(connection);
             }
+        }
+        private String time(){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            return LocalDateTime.now().format(formatter);
         }
 
     }
